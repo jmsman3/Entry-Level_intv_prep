@@ -1,0 +1,108 @@
+1)what is __init__>
+Answer:- is a contructor method in Python and is automatically called to allocate memory when a new object/instance is created. All classes have a __init__ method associated with them. It helps in distinguishing methods and attributes of a class from local variables.
+
+# class definition
+class Student:
+   def __init__(self, fname, lname, age, section):
+       self.firstname = fname
+       self.lastname = lname
+       self.age = age
+       self.section = section
+# creating a new object
+stu1 = Student("Sara", "Ansh", 22, "A2")
+
+2) What is Array?
+Answer:-Arrays in python can only contain elements of same data types.data type of array should be homogeneous.arrays consumes far less memory than lists.
+key --> homogeneous + less memory
+
+3) What is list?
+Answer:-Lists in python can contain elements of different data types. data type of lists can be heterogeneous. It has the disadvantage of consuming large memory.
+key --> heterogeneous + large memory
+
+4) What is slicing in Python?
+Answer:-Syntax for slicing is [start : stop : step]
+
+Exaple without stop-->numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+print(numbers[1 : : 2])  #output : [2, 4, 6, 8, 10]
+
+Exaple with Stop-->numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+print(numbers[1 :8: 2])  #output : [2, 4, 6, 8]
+
+5)What is docstring in Python?
+Answer:- Documentaion strin OR Docstring is a multiline string in python.it helps to Document of specific code segment.
+
+example(1)-->
+            def add_numbers(a, b):
+                """
+                Adds two numbers and returns the result.
+
+                Parameters:
+                a (int or float): The first number
+
+                Returns:
+                int or float: The sum of a and b.
+                """
+                return a + b
+
+            # Accessing the docstring
+            print(add_numbers.__doc__)
+
+----When you run the code, it will print:---
+            Adds two numbers and returns the result.
+
+            Parameters:
+            a (int or float): The first number.
+
+
+            Returns:
+            int or float: The sum of a and b.
+
+
+6) What are unit tests in Python?
+    -Unit test is a unit testing framework of Python.
+
+    -Unit testing means testing different components of software separately. Can you think about why unit testing is important? Imagine a scenario, you are building software that uses three components namely A, B, and C. Now, suppose your software breaks at a point time. How will you find which component was responsible for breaking the software? Maybe it was component A that failed, which in turn failed component B, and this actually failed the software. There can be many such combinations.
+
+    -This is why it is necessary to test each and every component properly so that we know which component might be highly responsible for the failure of the software.
+
+    - ইউনিট টেস্ট হল পাইথনের একটি ইউনিট টেস্টিং ফ্রেমওয়ার্ক।
+
+    - ইউনিট টেস্টিং মানে সফটওয়ারের বিভিন্ন উপাদানকে আলাদাভাবে পরীক্ষা করা। ভাবুন, আপনি একটি সফটওয়্যার তৈরি করছেন যা তিনটি উপাদান ব্যবহার করছে, যথা A, B, এবং C। এখন, ধরি আপনার সফটওয়্যার এক সময় ভেঙে পড়ে। আপনি কীভাবে বুঝবেন কোন উপাদান সফটওয়্যারটি ভেঙে দেওয়ার জন্য দায়ী ছিল? হয়তো উপাদান A ব্যর্থ হয়েছে, যা পরবর্তীতে উপাদান B-কে ব্যর্থ করেছে, এবং এটাই প্রকৃতপক্ষে সফটওয়্যারটি ব্যর্থ করেছে। এমন অনেক ধরনের সংমিশ্রণ থাকতে পারে।
+
+    - এজন্যই প্রতিটি উপাদানকে সঠিকভাবে পরীক্ষা করা প্রয়োজন, যাতে আমরা জানি কোন উপাদানটি সফটওয়্যারের ব্যর্থতার জন্য সবচেয়ে বেশি দায়ী হতে পারে।
+
+7) What is break, continue and pass in Python?
+Answer:-  
+- break: The `break` statement is used to exit a loop prematurely when a specific condition is met.
+
+- continue: The `continue` statement skips the current iteration of a loop and proceeds to the next iteration.
+
+- pass: The `pass` statement serves as a placeholder in Python where syntactically some code is required, but no action is needed.
+  # Example of break---------->
+                        print("Break Example:")
+                        for i in range(10):
+                            if i == 5:
+                                print("Breaking the loop at i =", i)
+                                break  # Exit the loop when i is 5
+                            print(i)
+                        print()  # For better separation of outputs
+
+# Example of continue---------->
+                        print("Continue Example:")
+                        for i in range(10):
+                            if i % 2 == 0:
+                                continue  # Skip the even numbers , continue means i%2==0 aitar bodol e o print korbe je i%2 != 0
+                            print("Odd number:", i)
+                        print()  # For better separation of outputs
+
+# Example of pass---------->
+                        print("Pass Example:")
+                        def placeholder_function():
+                            pass  # This function does nothing but can be defined
+                            print("This will not be printed.")
+
+                        # Calling the placeholder function
+                        placeholder_function()  # No output, but function can be called without error
+
+
+8)
