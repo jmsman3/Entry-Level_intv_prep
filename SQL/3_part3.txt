@@ -32,9 +32,13 @@ JOIN Queries
     Cross Join
 ----------------------------------------------------------------------------------
 Table Replication or Duplication
+    Replication of tables for testing, backups, or analysis purposes.
 
 ----------------------------------------------------------------------------------
 IN & Between
+    IN: Checks if a value exists within a specified set of values.
+    BETWEEN: Selects values within a given range (inclusive).
+
 
 ----------------------------------------------------------------------------------
 Set
@@ -50,6 +54,8 @@ Aggregate Queries
     COUNT
 
 Group By and Having
+    GROUP BY: Groups rows sharing a property so that aggregate functions can be applied.
+    HAVING: Filters groups according to a condition (used with GROUP BY).
 ----------------------------------------------------------------------------------
 Sub Queries
     Types of Sub Queries
@@ -63,7 +69,7 @@ Sub Queries
 ----------------------------------------------------------------------------------
 
 Common Table Expression
-
+    A temporary result set that can be referenced within a SELECT, INSERT, UPDATE, or DELETE statement.
 ----------------------------------------------------------------------------------
 Views
     Creating Views
@@ -71,3 +77,6 @@ Views
     Dropping Views
 
 ----------------------------------------------------------------------------------
+
+
+This covers essential SQL topics and functions, organized by functionality and use case. 

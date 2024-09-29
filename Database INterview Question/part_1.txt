@@ -1,0 +1,708 @@
+# Preparing the complete text for all 30 SQL questions and answers 
+
+1. What is SQL?
+    Answer: SQL (Structured Query Language) is a standard programming language used to manage and manipulate relation-al databases. It allows users to create, update, delete, and retrieve data from databases.
+----------------------------------------------------------------------------------
+
+2. What are the different types of SQL commands?
+    Answer: SQL commands are categorized into:
+    DDL (Data Definition Language): CREATE, ALTER, DROP
+    DML (Data Manipulation Language): SELECT, INSERT, UPDATE, DELETE
+    DCL (Data Control Language): GRANT, REVOKE
+    TCL (Transaction Control Language): COMMIT, ROLLBACK, SAVEPOINT
+----------------------------------------------------------------------------------
+
+3. What is a primary key in SQL?
+    Answer: A primary key is a unique identifier for a record in a database table. It ensures that each record is unique and cannot be null. A table can have only one primary key.
+----------------------------------------------------------------------------------
+
+4. What is the difference between DELETE and TRUNCATE?
+Answer: 
+    DELETE removes rows one at a time and can include a WHERE clause to filter which records to remove. It can be rolled back.
+    TRUNCATE removes all rows from a table but does not log individual row deletions and cannot include a WHERE clause. It's faster but cannot be rolled back in some database systems.
+
+  In Details:--> if necessary  you can read below:- 
+   1.DELETE:
+            - Purpose:Deletes specific rows from a table, based on conditions.
+            - Example:
+                Let's say you have a table called `Students` with the following data:
+
+                | ID  | Name  |
+                |-----|-------|
+                | 1   | John  |
+                | 2   | Sarah |
+                | 3   | Mark  |
+
+                If you want to remove only the student with `ID = 1`, you can run this query:
+
+                ```sql
+                DELETE FROM Students WHERE ID = 1;
+                ```
+
+                After running this query, the table will look like this:
+
+                | ID  | Name  |
+                |-----|-------|
+                | 2   | Sarah |
+                | 3   | Mark  |
+
+            - Rollback:You can undo (rollback) the DELETE if you haven't committed the transaction.
+
+    2.TRUNCATE:        
+            - Purpose: Deletes all rows from a table but keeps the structure of the table.
+            - Example:
+                If you run the following query on the `Students` table:
+
+                ```sql
+                TRUNCATE TABLE Students;
+                ```
+
+                This will remove all rows from the `Students` table, so the table will now be empty:
+
+                | ID  | Name  |
+                |-----|-------|
+                |     |       |
+
+            - Rollback: In many systems, TRUNCATE cannot be rolled back, so once it's done, it's permanent.
+
+            - Speed: TRUNCATE is generally faster because it doesn't check each row individually like DELETE does.
+----------------------------------------------------------------------------------
+
+5. What is a foreign key in SQL?
+    Answer: A foreign key is a field (or a collection of fields) in one table that uniquely identifies a row in another table. It creates a relationship between two tables and enforces referential integrity.
+----------------------------------------------------------------------------------
+
+6. What is normalization?
+    Answer: Normalization is the process of organizing database tables to reduce redundancy and improve data integrity. It involves dividing large tables into smaller ones and defining relationships between them.
+----------------------------------------------------------------------------------
+
+7. What is a JOIN in SQL?
+Answer:
+ A JOIN is used to combine rows from two or more tables based on a related column. Types of joins include:
+            INNER JOIN: Returns records that have matching values in both tables.
+            LEFT JOIN: Returns all records from the left table and the matched records from the right table.
+            RIGHT JOIN: Returns all records from the right table and the matched records from the left table.
+            FULL JOIN: Returns all records when there is a match in either table.
+
+ Detail All Joins:- 
+
+
+    1. INNER JOIN
+            -Description: Returns records that have matching values in both tables.
+
+            -Example:
+            Let's say we have two tables: `Students` and `Courses`.
+
+            Students Table:
+
+            | StudentID | Name  |
+            |-----------|-------|
+            | 1         | John  |
+            | 2         | Sarah |
+            | 3         | Mark  |
+
+            Courses Table:
+
+            | CourseID | StudentID | CourseName    |
+            |----------|-----------|---------------|
+            | 101      | 1         | Math          |
+            | 102      | 2         | Science       |
+            | 103      | 1         | History       |
+
+            Query:
+
+            ```sql
+            SELECT Students.Name, Courses.CourseName
+            FROM Students
+            INNER JOIN Courses ON Students.StudentID = Courses.StudentID;
+            ```
+
+            Result:
+
+            | Name  | CourseName |
+            |-------|------------|
+            | John  | Math       |
+            | Sarah | Science    |
+            | John  | History    |
+
+    2. LEFT JOIN
+            - Description: Returns all records from the left table and the matched records from the right table. If there is no match, NULL values are returned for the right table.
+
+            - Example:
+
+            Query:
+
+            ```sql
+            SELECT Students.Name, Courses.CourseName
+            FROM Students
+            LEFT JOIN Courses ON Students.StudentID = Courses.StudentID;
+            ```
+
+            Result:
+
+            | Name  | CourseName |
+            |-------|------------|
+            | John  | Math       |
+            | Sarah | Science    |
+            | Mark  | NULL       |
+
+    3. RIGHT JOIN
+            - Description: Returns all records from the right table and the matched records from the left table. If there is no match, NULL values are returned for the left table.
+
+            - Example:
+
+            Query:
+
+            ```sql
+            SELECT Students.Name, Courses.CourseName
+            FROM Students
+            RIGHT JOIN Courses ON Students.StudentID = Courses.StudentID;
+            ```
+
+            Result:
+
+            | Name  | CourseName |
+            |-------|------------|
+            | John  | Math       |
+            | Sarah | Science    |
+            | John  | History    |
+
+    4. FULL JOIN
+            - Description: Returns all records when there is a match in either table. If there is no match, NULL values are returned for the missing side.
+
+            - Example:
+
+            Query:
+
+            ```sql
+            SELECT Students.Name, Courses.CourseName
+            FROM Students
+            FULL JOIN Courses ON Students.StudentID = Courses.StudentID;
+            ```
+
+            Result:
+
+            | Name  | CourseName |
+            |-------|------------|
+            | John  | Math       |
+            | Sarah | Science    |
+            | Mark  | NULL       |
+            | NULL  | History    |
+
+            ---
+----------------------------------------------------------------------------------
+
+8. What is the difference between WHERE and HAVING?
+Answer: 
+    WHERE filters records before any grouping is done.
+    HAVING filters records after GROUP BY has been applied, typically used with aggregate functions like SUM, COUNT, MAX, etc.
+
+ In Detail WHERE and HAVING:-
+        ---
+
+    Example:
+
+        Consider a `Sales` table:
+
+        Sales Table:
+
+        | SaleID | Product  | Amount | Quantity |
+        |--------|----------|--------|----------|
+        | 1      | Apples   | 100    | 5        |
+        | 2      | Bananas  | 200    | 8        |
+        | 3      | Apples   | 150    | 10       |
+        | 4      | Oranges  | 300    | 6        |
+        | 5      | Bananas  | 400    | 12       |
+
+    <--------Using WHERE-------->
+
+        If we want to find sales where the amount is greater than 150, we use `WHERE`:
+
+        ```sql
+        SELECT *
+        FROM Sales
+        WHERE Amount > 150;
+        ```
+
+    Result:-------->
+
+        | SaleID | Product  | Amount | Quantity |
+        |--------|----------|--------|----------|
+        | 2      | Bananas  | 200    | 8        |
+        | 3      | Apples   | 150    | 10       |
+        | 5      | Bananas  | 400    | 12       |
+
+    <--------Using HAVING-------->
+
+        If we want to find products where the total sales amount exceeds 250, we would first group by `Product` and then apply `HAVING`:
+
+        ```sql
+        SELECT Product, SUM(Amount) AS TotalAmount
+        FROM Sales
+        GROUP BY Product
+        HAVING SUM(Amount) > 250;
+        ```
+
+    Result:-------->
+
+        | Product  | TotalAmount |
+        |----------|-------------|
+        | Bananas  | 600         |
+        | Oranges  | 300         |
+
+        ---
+
+        In summary:
+        - Use `WHERE` to filter rows before aggregation.
+        - Use `HAVING` to filter groups after aggregation has been applied. 
+
+----------------------------------------------------------------------------------
+
+9. How can you retrieve unique records from a table?
+Answer: Use the DISTINCT keyword in a SELECT query to fetch unique records. For example:
+SELECT DISTINCT column_name FROM table_name;
+
+ In Detail DISTINCT:
+            
+    Example Scenario
+
+            Let’s say we have a `Customers` table that contains the following records:
+
+            Customers Table:
+
+            | CustomerID | Name        | City        |
+            |------------|-------------|-------------|
+            | 1          | Alice       | New York    |
+            | 2          | Bob         | Los Angeles  |
+            | 3          | Charlie     | New York    |
+            | 4          | David       | Chicago     |
+            | 5          | Eva         | Los Angeles  |
+
+        Using DISTINCT
+
+            -Objective
+
+            If we want to retrieve a list of unique cities where the customers are located, we would use the `DISTINCT` keyword as follows:
+
+            ```sql
+            SELECT DISTINCT City FROM Customers;
+            ```
+
+        Explanation of the Query:
+
+            1.SELECT DISTINCT City: This part of the query specifies that we want to select unique values from the `City` column.
+            
+            2. FROM Customers: This indicates that we're querying the data from the `Customers` table.
+
+         Result of the Query:
+
+            | City         |
+            |--------------|
+            | New York     |
+            | Los Angeles   |
+            | Chicago      |
+
+        Additional Example
+
+            If you want to retrieve unique names from the `Customers` table, you could write:
+
+            ```sql
+            SELECT DISTINCT Name FROM Customers;
+            ```
+
+        Result of the Query:
+
+            | Name      |
+            |-----------|
+            | Alice     |
+            | Bob       |
+            | Charlie   |
+            | David     |
+            | Eva       |
+
+        Summary-
+
+            - The `DISTINCT` keyword is used to return only unique (different) values from a specified column.
+            - It helps in removing duplicates from the result set, making it useful for getting unique records from a table.
+         
+----------------------------------------------------------------------------------
+
+10. What is the difference between CHAR and VARCHAR?
+Answer: 
+    CHAR(n) is a fixed-length data type. It always stores the specified number of characters, padding with spaces if necessary.
+    VARCHAR(n) is a variable-length data type. It stores only the actual number of characters, up to a specified limit, without padding.
+
+    --CHAR stores fixed-length data, which can lead to wasted space if the actual data length is less than the specified size.
+
+    --VARCHAR stores variable-length data, making it more efficient in terms of storage when dealing with varying lengths of input.
+            Choosing between CHAR and VARCHAR should depend on the nature of the data. If you know that the data will always be of a fixed length, CHAR may be appropriate. Otherwise, VARCHAR is usually the better option.
+----------------------------------------------------------------------------------
+
+11. What is a subquery in SQL?
+    Answer: A subquery is a query within another query. It can be used in the SELECT, WHERE, or FROM clause. Subqueries can be either correlated (depends on the outer query) or non-correlated (independent of the outer query).
+----------------------------------------------------------------------------------
+
+12. Explain the GROUP BY clause.
+Answer:
+        The GROUP BY clause groups rows that have the same values in specified columns. It is often used with aggregate functio(COUNT, SUM, AVG, etc.) to apply calculations on each group.
+
+        SELECT column_name, COUNT(*)
+        FROM table_name
+        GROUP BY column_name;
+
+ In Detail GROUP_BY- (প্রতিটা প্রোডাক্ট কত পিস বিক্রি হইসে ,সেটা বাহির করতে GROUP_BY সাহায্য করে)
+        The `GROUP BY` clause is an essential part of SQL used to arrange identical data into groups. This clause is typically used in conjunction with aggregate functions like `COUNT`, `SUM`, `AVG`, etc., to perform calculations on each group of data.
+
+     Example
+
+            Consider a table called `Sales`, which has the following columns:
+
+            | id | product_name | quantity | sale_date  |
+            |----|--------------|----------|------------|
+            | 1  | Apple        | 10       | 2024-09-01 |
+            | 2  | Banana       | 15       | 2024-09-01 |
+            | 3  | Apple        | 5        | 2024-09-02 |
+            | 4  | Orange       | 8        | 2024-09-02 |
+            | 5  | Banana       | 20       | 2024-09-03 |
+
+            If you want to find the total quantity sold for each product, you would use the `GROUP BY` clause like this:
+
+            ```sql
+            SELECT product_name, SUM(quantity) AS total_quantity
+            FROM Sales
+            GROUP BY product_name;
+            ```
+
+    Result
+
+            This query will group the sales by `product_name` and sum up the `quantity` for each product. The result would look like this:
+
+            | product_name | total_quantity |
+            |--------------|----------------|
+            | Apple        | 15             |
+            | Banana       | 35             |
+            | Orange       | 8              |
+
+    Explanation
+
+            - SELECT product_name, SUM(quantity) AS total_quantity`: This selects the `product_name` and calculates the total quantity sold for each product.
+            - `FROM Sales`: This specifies the table from which to retrieve data.
+            - `GROUP BY product_name`: This groups the results by `product_name`, allowing the `SUM` function to operate on each group separately.
+
+----------------------------------------------------------------------------------
+
+13. What is the difference between UNION and UNION ALL?
+Answer: 
+    UNION combines the results of two queries and removes duplicate records.
+    UNION ALL combines the results of two queries without removing duplicates.
+
+ Halka ektu details dekhi tahole mone thakbe -->
+
+            ### Example
+
+            Consider two small tables:
+
+            Table 1: Fruits
+
+            | id | fruit_name |
+            |----|------------|
+            | 1  | Apple      |
+            | 2  | Banana     |
+            | 3  | Cherry     |
+
+            Table 2: More Fruits
+
+            | id | fruit_name |
+            |----|------------|
+            | 1  | Banana     |
+            | 2  | Cherry     |
+            | 3  | Date       |
+
+            ### Using `UNION`
+
+            If you want to combine the fruit names from both tables without duplicates:
+
+            ```sql
+            SELECT fruit_name FROM Fruits
+            UNION
+            SELECT fruit_name FROM More_Fruits;
+            ```
+
+            ### Result of `UNION`
+
+            | fruit_name |
+            |------------|
+            | Apple      |
+            | Banana     |
+            | Cherry     |
+            | Date       |
+
+            ### Using `UNION ALL`
+
+            If you want to combine the fruit names from both tables and keep all duplicates:
+
+            ```sql
+            SELECT fruit_name FROM Fruits
+            UNION ALL
+            SELECT fruit_name FROM More_Fruits;
+            ```
+
+            ### Result of `UNION ALL`
+
+            | fruit_name |
+            |------------|
+            | Apple      |
+            | Banana     |
+            | Cherry     |
+            | Banana     |
+            | Cherry     |
+            | Date       |
+
+            ### Summary of Results:
+
+            - `UNION`: Removes duplicates, resulting in a unique list of fruits.
+            - `UNION ALL`: Includes duplicates, showing all occurrences of each fruit.
+----------------------------------------------------------------------------------
+
+14. What are indexes, and why are they important?
+Answer:
+    Indexes are database objects that improve the speed of data retrieval. They act like pointers to data and are created on columns that are frequently used in WHERE clauses. However, indexes also slow down INSERT, UPDATE, and DELETE operations since the index itself must be updated.
+  in Detail-Index-
+
+
+    ### Table: Employees
+
+            | id | first_name | last_name | email                 |
+            |----|------------|-----------|-----------------------|
+            | 1  | John       | Doe       | john.doe@example.com  |
+            | 2  | Jane       | Smith     | jane.smith@example.com|
+            | 3  | Emily      | Johnson    | emily.j@example.com   |
+            | 4  | Mike       | Brown     | mike.brown@example.com |
+
+        ### 1. Creating the Index
+
+            ```sql
+            CREATE INDEX idx_last_name ON Employees(last_name); //mane ai line ta add korle r ki fast kaaj korbe or fastly retrive korbe last name khuje bahir korte .
+            ```
+
+        #### Output:
+            This command does not return any rows; it simply creates an index named `idx_last_name` on the `last_name` column of the `Employees` table.
+
+        ### 2. Querying with the Index
+
+            ```sql
+            SELECT * FROM Employees WHERE last_name = 'Smith';
+            //aikhane last name khub taratari retrive korar jonno index er oi line ta dorkar pore r ki.
+            ```
+
+        #### Expected Output:
+
+            | id | first_name | last_name | email                  |
+            |----|------------|-----------|------------------------|
+            | 2  | Jane       | Smith     | jane.smith@example.com |
+
+         ### Explanation of Output:
+
+            - The query retrieves all columns from the `Employees` table where the `last_name` is 'Smith'.
+            - The index `idx_last_name` helps the database quickly locate the record without scanning the entire table, resulting in faster query execution.
+
+        ### Summary of Query Outputs
+
+            - Creating Index: No output, but the index is created.
+            - Query for Last Name 'Smith': Returns the row corresponding to Jane Smith, showing her `id`, `first_name`, `last_name`, and `email`.
+----------------------------------------------------------------------------------
+
+15. How can you update data in an SQL table?
+Answer: 
+        Use the UPDATE statement to modify existing records:
+            UPDATE table_name
+            SET column_name = new_value
+            WHERE condition;
+ In Detail UPDATE -
+               
+    ### Initial Table: Employees
+
+                | id | first_name | last_name | email                  |
+                |----|------------|-----------|------------------------|
+                | 1  | John       | Doe       | john.doe@example.com   |
+                | 2  | Jane       | Smith     | jane.smith@example.com |
+                | 3  | Emily      | Johnson    | emily.j@example.com    |
+                | 4  | Mike       | Brown     | mike.brown@example.com  |
+
+        ### SQL Code to Update
+
+                ```sql
+                UPDATE Employees
+                SET email = 'jane.newemail@example.com'
+                WHERE first_name = 'Jane' AND last_name = 'Smith';
+                ```
+
+        ### Output Table After Update
+
+                | id | first_name | last_name | email                       |
+                |----|------------|-----------|-----------------------------|
+                | 1  | John       | Doe       | john.doe@example.com        |
+                | 2  | Jane       | Smith     | jane.newemail@example.com   |
+                | 3  | Emily      | Johnson    | emily.j@example.com         |
+                | 4  | Mike       | Brown     | mike.brown@example.com      |
+
+        ### Summary
+
+                - Initial State: The `email` for Jane Smith is `jane.smith@example.com`.
+                - Update Action: The email is updated to `jane.newemail@example.com`.
+                - Final State: The change reflects in the output table.
+----------------------------------------------------------------------------------
+
+16. What is a composite key?
+Answer: A composite key is a combination of two or more columns used to uniquely identify rows in a table. It is useful when a single column is not sufficient to uniquely identify a row.
+ 
+ in Detail COMPOSITE-KEY-
+
+    ### Table: Enrollment
+
+        #### SQL Code to Create the Table
+
+                ```sql
+                CREATE TABLE Enrollment (
+                    student_id INT,
+                    course_id INT,
+                    enrollment_date DATE,
+                    PRIMARY KEY (student_id, course_id)  -- Composite Key , DUITA EKSHATE COMPOSITE HESEBE GONNO HOBE
+                );
+                ```
+
+        #### SQL Code to Insert Data
+
+                ```sql
+                INSERT INTO Enrollment (student_id, course_id, enrollment_date) VALUES
+                (1, 101, '2024-01-15'),
+                (1, 102, '2024-01-16'),
+                (2, 101, '2024-01-17'),
+                (3, 103, '2024-01-18');
+                ```
+
+        ### Query to Retrieve Data
+
+                ```sql
+                SELECT * FROM Enrollment;
+                ```
+
+    ### Expected Output Result
+
+                | student_id | course_id | enrollment_date |
+                |------------|-----------|------------------|
+                | 1          | 101       | 2024-01-15       |
+                | 1          | 102       | 2024-01-16       |
+                | 2          | 101       | 2024-01-17       |
+                | 3          | 103       | 2024-01-18       |
+
+            ### Explanation of the Output
+
+                - The table `Enrollment` records which students are enrolled in which courses on what dates.
+                - The composite key is made up of `student_id` and `course_id`, ensuring that each combination of these two columns is unique.
+                - In the output, you can see:
+                - Student 1 is enrolled in two courses: 101 and 102.
+                - Student 2 is enrolled in course 101.
+                - Student 3 is enrolled in course 103.
+----------------------------------------------------------------------------------
+
+17. How do you create a view in SQL?
+Answer: A view is a virtual table based on the result set of an SELECT query. You can create a view with:
+CREATE VIEW view_name AS
+SELECT column_name FROM table_name WHERE condition;
+----------------------------------------------------------------------------------
+
+18. What is a stored procedure?
+Answer: A stored procedure is a set of SQL statements stored in the database that can be executed repeatedly. It allows modular programming, better security, and improved performance.
+----------------------------------------------------------------------------------
+
+19. What is the use of the LIMIT clause?
+Answer: The LIMIT clause is used to specify the number of records to return in a query result. For example, to get the top 5 records:
+SELECT * FROM table_name LIMIT 5;
+----------------------------------------------------------------------------------
+
+20. How can you improve query performance in SQL?
+Answer: 
+Use indexes on frequently searched columns.
+Avoid using SELECT *; instead, specify only the required columns.
+Use joins instead of subqueries where possible.
+Use query optimization techniques like EXPLAIN to analyze the query plan.
+----------------------------------------------------------------------------------
+
+21. What is the difference between IN and EXISTS in SQL?
+Answer: 
+IN checks if a value matches any value in a list or subquery, returning true if a match is found.
+EXISTS checks the existence of rows in a subquery, returning true if at least one row is returned by the subquery.
+----------------------------------------------------------------------------------
+
+22. What are aggregate functions in SQL?
+Answer: Aggregate functions perform calculations on a set of values and return a single value. Common examples include:
+SUM(): Returns the sum of a numeric column.
+AVG(): Returns the average value.
+COUNT(): Counts the number of rows.
+MIN() and MAX(): Return the minimum and maximum values, respectively.
+----------------------------------------------------------------------------------
+
+23. What is the difference between BETWEEN and IN operators?
+Answer: 
+BETWEEN selects values within a specified range, including the boundary values.
+IN allows you to specify multiple values to match a column against.
+SELECT * FROM employees WHERE salary BETWEEN 30000 AND 50000;
+SELECT * FROM employees WHERE department_id IN (1, 2, 3);
+----------------------------------------------------------------------------------
+
+24. What is an alias in SQL, and how is it used?
+Answer: An alias is a temporary name given to a table or column for the duration of a query. It improves readability and shortens complex column or table names.
+SELECT e.name AS employee_name, d.name AS department_name
+FROM employees e JOIN departments d ON e.department_id = d.department_id;
+----------------------------------------------------------------------------------
+
+25. What is a DEFAULT constraint in SQL?
+Answer: The DEFAULT constraint provides a default value for a column when no value is specified during an INSERT operation.
+CREATE TABLE employees (
+  id INT PRIMARY KEY,
+  name VARCHAR(100),
+  salary DECIMAL(10, 2) DEFAULT 50000
+);
+----------------------------------------------------------------------------------
+
+26. What is a recursive query in SQL?
+Answer: A recursive query refers to a query that refers to itself using a Common Table Expression (CTE). It is useful for hierarchical or tree-structured data.
+WITH RECURSIVE EmployeeHierarchy AS (
+  SELECT id, name, manager_id
+  FROM employees
+  WHERE manager_id IS NULL
+  UNION ALL
+  SELECT e.id, e.name, e.manager_id
+  FROM employees e
+  JOIN EmployeeHierarchy eh ON e.manager_id = eh.id
+)
+SELECT * FROM EmployeeHierarchy;
+----------------------------------------------------------------------------------
+
+27. What is database partitioning, and why is it used?
+Answer: Database partitioning involves splitting a table into smaller, more manageable pieces (partitions), each of which can be queried separately. This improves query performance, especially on large datasets, and helps with database maintenance. Types of partitioning include range partitioning, list partitioning, hash partitioning, and composite partitioning.
+----------------------------------------------------------------------------------
+
+28. What are window functions in SQL?
+Answer: Window functions perform calculations across a set of table rows related to the current row, without collapsing the rows into a single result. Common window functions include ROW_NUMBER(), RANK(), and LAG().
+SELECT name, salary, ROW_NUMBER() OVER (ORDER BY salary DESC) AS salary_rank
+FROM employees;
+----------------------------------------------------------------------------------
+
+29. What is the difference between a materialized view and a regular view?
+Answer: 
+A regular view is a virtual table created from a SELECT query. It doesn’t store data but dynamically generates the result each time the view is queried.
+A materialized view stores the query result physically on disk, providing faster access but requiring periodic refreshing to stay up to date.
+----------------------------------------------------------------------------------
+
+30. How can you implement error handling in SQL?
+Answer: Error handling can be implemented using TRY...CATCH blocks, particularly in SQL Server, to capture and manage exceptions during query execution.
+BEGIN TRY
+  -- SQL statements
+END TRY
+BEGIN CATCH
+  -- Handle error
+  SELECT ERROR_MESSAGE() AS ErrorMessage;
+END CATCH;
+----------------------------------------------------------------------------------
