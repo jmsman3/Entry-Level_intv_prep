@@ -1,4 +1,4 @@
-# Preparing the complete text for all 30 SQL questions and answers 
+# Home Task On Database
 
 1. What is SQL?
     Answer: SQL (Structured Query Language) is a standard programming language used to manage and manipulate relation-al databases. It allows users to create, update, delete, and retrieve data from databases.
