@@ -610,99 +610,316 @@ Answer: A composite key is a combination of two or more columns used to uniquely
 Answer: A view is a virtual table based on the result set of an SELECT query. You can create a view with:
 CREATE VIEW view_name AS
 SELECT column_name FROM table_name WHERE condition;
+
+   সহজ ভাষায় মেইন টেবিল থেকে কলাম Import করে , নিজের একটা CUSTOMIZE টেবিল বানিয়ে নেয়া যাবে
+
+ IN DETAIL VIEW--->
+    ### Step 1: Create the Main Table
+
+            ```sql
+            CREATE TABLE Employees (
+                id INT PRIMARY KEY,
+                first_name VARCHAR(50),
+                last_name VARCHAR(50),
+                department VARCHAR(50),
+                salary INT
+            );
+            ```
+
+    ### Step 2: Insert Data into the Main Table
+
+            ```sql
+            INSERT INTO Employees (id, first_name, last_name, department, salary) VALUES
+            (1, 'John', 'Doe', 'HR', 50000),
+            (2, 'Jane', 'Smith', 'IT', 60000),
+            (3, 'Emily', 'Johnson', 'IT', 65000),
+            (4, 'Mike', 'Brown', 'Marketing', 45000);
+            ```
+
+    ### Step 3: Create a Customized View
+
+            ```sql
+            CREATE VIEW Customized_IT_Employees AS
+            SELECT CONCAT(first_name, ' ', last_name) AS full_name,
+                salary * 12 AS annual_salary
+            FROM Employees
+            WHERE 
+                department = 'IT';
+            ```
+
+    ### Step 4: Query the Customized View
+
+            ```sql
+            SELECT * FROM Customized_IT_Employees;
+            ```
+
+            ### Expected Output Result
+
+            | full_name        | annual_salary |
+            |------------------|---------------|
+            | Jane Smith       | 720000        |
+            | Emily Johnson    | 780000        |
+
+    ### Summary
+
+            - Main Table: `Employees` is created and populated with data.
+            - View: `Customized_IT_Employees` is created to show full names and annual salaries of IT employees.
+            - Output: The result table displays the full names and annual salaries of employees from the IT department.
 ----------------------------------------------------------------------------------
 
 18. What is a stored procedure?
-Answer: A stored procedure is a set of SQL statements stored in the database that can be executed repeatedly. It allows modular programming, better security, and improved performance.
+Answer:
+        A stored procedure is a set of SQL statements stored in the database that can be executed repeatedly. It allows modular programming, better security, and improved performance.
 ----------------------------------------------------------------------------------
 
 19. What is the use of the LIMIT clause?
-Answer: The LIMIT clause is used to specify the number of records to return in a query result. For example, to get the top 5 records:
-SELECT * FROM table_name LIMIT 5;
+Answer: 
+        The LIMIT clause is used to specify the number of records to return in a query result. For example, to get the top 5 records:
+                SELECT * FROM table_name LIMIT 5;
+
+ IN DETAIL LIMIT WITH ACENDING AND DECENDING EXAMPLE-
+
+            ### Table Structure: `employees`
+
+                | id | name     | position         | salary |
+                |----|----------|------------------|--------|
+                | 1  | Alice    | Developer        | 70000  |
+                | 2  | Bob      | Manager          | 80000  |
+                | 3  | Charlie  | Developer        | 75000  |
+                | 4  | David    | Designer         | 65000  |
+                | 5  | Eva      | Developer        | 72000  |
+                | 6  | Frank    | Manager          | 85000  |
+                | 7  | Grace    | Designer         | 68000  |
+
+                ### SQL Code
+
+                ```sql
+                -- Highest paid employees
+
+                            SELECT * FROM employees
+                            ORDER BY salary DESC
+                            LIMIT 3;
+
+                -- Lowest paid employees
+                            SELECT * FROM employees
+                            ORDER BY salary ASC
+                            LIMIT 3;
+                ```
+
+                ### Final Output: Highest Paid Employees
+
+                | id | name   | position  | salary |
+                |----|--------|-----------|--------|
+                | 6  | Frank  | Manager   | 85000  |
+                | 2  | Bob    | Manager   | 80000  |
+                | 3  | Charlie| Developer | 75000  |
+
+                ### Final Output: Lowest Paid Employees
+
+                | id | name   | position  | salary |
+                |----|--------|-----------|--------|
+                | 4  | David  | Designer  | 65000  |
+                | 7  | Grace  | Designer  | 68000  |
+                | 1  | Alice  | Developer | 70000  |
 ----------------------------------------------------------------------------------
 
 20. How can you improve query performance in SQL?
 Answer: 
-Use indexes on frequently searched columns.
-Avoid using SELECT *; instead, specify only the required columns.
-Use joins instead of subqueries where possible.
-Use query optimization techniques like EXPLAIN to analyze the query plan.
+        Use indexes on frequently searched columns.
+        Avoid using SELECT *; instead, specify only the required columns.
+        Use joins instead of subqueries where possible.
+        Use query optimization techniques like EXPLAIN to analyze the query plan.
+
+ IN DETAIL TO MAKE FASTER  THE SQL QUERYIES-
+
+    1. Use Indexes on Frequently Searched Columns
+
+        Explanation: Indexes help speed up data retrieval by allowing the database to find rows more quickly.
+
+            Example:
+                Assuming you have a table named `customers`:
+
+                CREATE TABLE customers (
+                    id INT PRIMARY KEY,
+                    name VARCHAR(100),
+                    email VARCHAR(100),
+                    age INT
+                );
+
+                -- Create an index on the email column
+
+                CREATE INDEX idx_email ON customers(email);
+
+                Query Using the Index:
+
+                SELECT * FROM customers WHERE email = 'example@example.com';
+
+    2. Avoid Using `SELECT *`; Specify Only Required Columns
+
+        Explanation: Retrieving only the necessary columns reduces the amount of data transferred and processed.
+
+            Example:
+                Instead of this:
+                SELECT * FROM orders;
+
+                Use:
+                SELECT order_id, customer_id, order_date FROM orders;
+
+    3. Use Joins Instead of Subqueries Where Possible
+
+        Explanation: Joins can be more efficient than subqueries because they can use indexes and optimize data retrieval.
+
+            Example:
+                Instead of using a subquery:
+                SELECT customer_id FROM orders WHERE order_id IN (SELECT order_id FROM order_details WHERE product_id = 123);
+
+            Use a join:
+                SELECT DISTINCT o.customer_id 
+                FROM orders o
+                JOIN order_details od ON o.order_id = od.order_id
+                WHERE od.product_id = 123;
+
+    4. Use Query Optimization Techniques Like `EXPLAIN`
+
+        Explanation: 
+                The `EXPLAIN` statement shows the execution plan for a query, helping to identify bottlenecks and inefficiencies.
+
+            Example:
+                You can analyze your query like this:
+                EXPLAIN SELECT * FROM customers WHERE age > 30;
+
+                This will provide output that includes details about the query plan, such as whether indexes are used and how many rows are scanned, allowing you to make informed adjustments.
+
+            Summary of Techniques
+
+                - Indexes improve search speed.
+                - Selecting specific columns minimizes data transfer.
+                - Using joins is generally more efficient than subqueries.
+                - Using `EXPLAIN` helps analyze and optimize query performance.
+
 ----------------------------------------------------------------------------------
 
 21. What is the difference between IN and EXISTS in SQL?
 Answer: 
-IN checks if a value matches any value in a list or subquery, returning true if a match is found.
-EXISTS checks the existence of rows in a subquery, returning true if at least one row is returned by the subquery.
+        IN checks if a value matches any value in a list or subquery, returning true if a match is found.
+        EXISTS checks the existence of rows in a subquery, returning true if at least one row is returned by the subquery.
 ----------------------------------------------------------------------------------
 
 22. What are aggregate functions in SQL?
-Answer: Aggregate functions perform calculations on a set of values and return a single value. Common examples include:
-SUM(): Returns the sum of a numeric column.
-AVG(): Returns the average value.
-COUNT(): Counts the number of rows.
-MIN() and MAX(): Return the minimum and maximum values, respectively.
+Answer: 
+    -Aggregate functions perform calculations on a set of values and return a single value. Common examples include:
+        SUM(): Returns the sum of a numeric column.
+        AVG(): Returns the average value.
+        COUNT(): Counts the number of rows.
+        MIN() and MAX(): Return the minimum and maximum values, respectively.
 ----------------------------------------------------------------------------------
 
 23. What is the difference between BETWEEN and IN operators?
 Answer: 
-BETWEEN selects values within a specified range, including the boundary values.
-IN allows you to specify multiple values to match a column against.
-SELECT * FROM employees WHERE salary BETWEEN 30000 AND 50000;
-SELECT * FROM employees WHERE department_id IN (1, 2, 3);
+    "BETWEEN" - selects values within a specified range, including the boundary values.
+    "IN" - allows you to specify multiple values to match a column against.
+
+    SELECT * FROM employees WHERE salary BETWEEN 30000 AND 50000;
+    SELECT * FROM employees WHERE department_id IN (1, 2, 3);
 ----------------------------------------------------------------------------------
 
 24. What is an alias in SQL, and how is it used?
-Answer: An alias is a temporary name given to a table or column for the duration of a query. It improves readability and shortens complex column or table names.
-SELECT e.name AS employee_name, d.name AS department_name
-FROM employees e JOIN departments d ON e.department_id = d.department_id;
+Answer: 
+    An alias is a temporary name given to a table or column for the duration of a query. It improves readability and shortens complex column or table names.
+    
+    SELECT e.name AS employee_name, d.name AS department_name
+    FROM employees e JOIN departments d ON e.department_id = d.department_id;
 ----------------------------------------------------------------------------------
 
 25. What is a DEFAULT constraint in SQL?
-Answer: The DEFAULT constraint provides a default value for a column when no value is specified during an INSERT operation.
-CREATE TABLE employees (
-  id INT PRIMARY KEY,
-  name VARCHAR(100),
-  salary DECIMAL(10, 2) DEFAULT 50000
-);
+Answer: 
+    The DEFAULT constraint provides a default value for a column when no value is specified during an INSERT operation.
+        CREATE TABLE employees (
+        id INT PRIMARY KEY,
+        name VARCHAR(100),
+        salary DECIMAL(10, 2) DEFAULT 50000
+        );
+
+ in DETAIL ->
+    ### SQL Code
+
+                ```sql
+                CREATE TABLE employees (
+                id INT PRIMARY KEY,
+                name VARCHAR(100),
+                salary DECIMAL(10, 2) DEFAULT 50000
+                );
+
+        -- Inserting records
+                INSERT INTO employees (id, name) VALUES (1, 'Alice');
+                INSERT INTO employees (id, name, salary) VALUES (2, 'Bob', 60000);
+                ```
+
+         ### Table Structure
+
+                | id | name  | salary  |
+                |----|-------|---------|
+                | 1  | Alice | 50000.00|
+                | 2  | Bob   | 60000.00| 
+
+        ### Table Output
+
+                | id | name  | salary  |
+                |----|-------|---------|
+                | 1  | Alice | 50000.00|
+                | 2  | Bob   | 60000.00| 
 ----------------------------------------------------------------------------------
 
-26. What is a recursive query in SQL?
-Answer: A recursive query refers to a query that refers to itself using a Common Table Expression (CTE). It is useful for hierarchical or tree-structured data.
-WITH RECURSIVE EmployeeHierarchy AS (
-  SELECT id, name, manager_id
-  FROM employees
-  WHERE manager_id IS NULL
-  UNION ALL
-  SELECT e.id, e.name, e.manager_id
-  FROM employees e
-  JOIN EmployeeHierarchy eh ON e.manager_id = eh.id
-)
-SELECT * FROM EmployeeHierarchy;
+
+//aikahne theke nicher gula ektu advance question ,aapatoto skip kora jai ,i guess
+
+26. What is a recursive query in SQL? //aita maybe Advance questions,Skipable aapatoto
+Answer: 
+    A recursive query refers to a query that refers to itself using a Common Table Expression (CTE). It is useful for hierarchical or tree-structured data.
+
+        WITH RECURSIVE EmployeeHierarchy AS (
+        SELECT id, name, manager_id
+        FROM employees
+        WHERE manager_id IS NULL
+        UNION ALL
+        SELECT e.id, e.name, e.manager_id
+        FROM employees e
+        JOIN EmployeeHierarchy eh ON e.manager_id = eh.id
+        )
+        SELECT * FROM EmployeeHierarchy;
 ----------------------------------------------------------------------------------
 
 27. What is database partitioning, and why is it used?
-Answer: Database partitioning involves splitting a table into smaller, more manageable pieces (partitions), each of which can be queried separately. This improves query performance, especially on large datasets, and helps with database maintenance. Types of partitioning include range partitioning, list partitioning, hash partitioning, and composite partitioning.
+Answer: 
+    Database partitioning involves splitting a table into smaller, more manageable pieces (partitions), each of which can be queried separately. This improves query performance, especially on large datasets, and helps with database maintenance. 
+    Types of partitioning include -
+        -range partitioning, 
+        -list partitioning, 
+        -hash partitioning, 
+        -and composite partitioning.
 ----------------------------------------------------------------------------------
 
 28. What are window functions in SQL?
-Answer: Window functions perform calculations across a set of table rows related to the current row, without collapsing the rows into a single result. Common window functions include ROW_NUMBER(), RANK(), and LAG().
-SELECT name, salary, ROW_NUMBER() OVER (ORDER BY salary DESC) AS salary_rank
-FROM employees;
+Answer: 
+    Window functions perform calculations across a set of table rows related to the current row, without collapsing the rows into a single result. Common window functions include ROW_NUMBER(), RANK(), and LAG().
+    SELECT name, salary, ROW_NUMBER() OVER (ORDER BY salary DESC) AS salary_rank
+    FROM employees;
 ----------------------------------------------------------------------------------
 
 29. What is the difference between a materialized view and a regular view?
 Answer: 
-A regular view is a virtual table created from a SELECT query. It doesn’t store data but dynamically generates the result each time the view is queried.
-A materialized view stores the query result physically on disk, providing faster access but requiring periodic refreshing to stay up to date.
+    A regular view is a virtual table created from a SELECT query. It doesn’t store data but dynamically generates the result each time the view is queried.
+    A materialized view stores the query result physically on disk, providing faster access but requiring periodic refreshing to stay up to date.
 ----------------------------------------------------------------------------------
 
 30. How can you implement error handling in SQL?
-Answer: Error handling can be implemented using TRY...CATCH blocks, particularly in SQL Server, to capture and manage exceptions during query execution.
-BEGIN TRY
-  -- SQL statements
-END TRY
-BEGIN CATCH
-  -- Handle error
-  SELECT ERROR_MESSAGE() AS ErrorMessage;
-END CATCH;
+Answer: 
+    Error handling can be implemented using TRY...CATCH blocks, particularly in SQL Server, to capture and manage exceptions during query execution.
+        BEGIN TRY
+        -- SQL statements
+        END TRY
+        BEGIN CATCH
+        -- Handle error
+        SELECT ERROR_MESSAGE() AS ErrorMessage;
+        END CATCH;
 ----------------------------------------------------------------------------------
